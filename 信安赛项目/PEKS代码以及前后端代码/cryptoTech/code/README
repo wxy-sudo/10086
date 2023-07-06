@@ -1,0 +1,16 @@
+## 需要的环境:
+1- Linux （已在ubuntu20.04测试）
+2- 安装 gcc (g++) 要求支持选项 -std=c++14
+3- 安装 gmp 和 mpfr
+4- 安装 nfllib
+5- 将makeflie中的路径修改为:
+	NFLLIB_HOME: 安装 nfllib 的路径
+	LIBS_HOME  : 安装 gmp 和 mpfr 的路径
+ 
+
+## 编译方法:
+* No optimization: make -Ibuild
+* Optimized: make -Ibuild build
+* Run test : make -Ibuild run
+
+
