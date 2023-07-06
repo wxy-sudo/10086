@@ -1,5 +1,9 @@
 # s
 
+成员：王鑫阳
+
+学号：202100150054
+
 <div align="center">
 
 | 项目号  | 项目名称| 对应文件夹 |
@@ -9,4 +13,3 @@
 | 3   | implement length extension attack for SM3, SHA256, etc.   | [sm3_lengthExtensionAttack](https://github.com/wxy-sudo/wxy-s/tree/main/sm3_lengthExtensionAttack) |
 
 </div>
-https://github.com/wxy-sudo/wxy-s/tree/main/sm3_lengthExtensionAttack
