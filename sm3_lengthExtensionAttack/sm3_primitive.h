@@ -6,7 +6,6 @@
 #include <openssl/evp.h>
 #include <openssl/crypto.h>
 #include<string.h>
-#include "byteorder.h"
 #define sm3_digest_BYTES 32
 #define sm3_block_BYTES 64
 #define sm3_hmac_BYTES sm3_digest_BYTES
