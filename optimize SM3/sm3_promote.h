@@ -8,7 +8,7 @@
 #include <openssl/evp.h>
 #include <openssl/crypto.h>
 #include<string.h>
-#include "byteorder.h"
+#include<omp.h>
 #define sm3_digest_BYTES 32
 #define sm3_block_BYTES 64
 #define sm3_hmac_BYTES sm3_digest_BYTES
@@ -42,10 +42,10 @@ void sm3_init_simd(sm3_ctx_simd* ctx) {
 }
 
 
-#define ROTATELEFT(X,n)  (((X)<<(n)) | ((X)>>(32-(n))))
+#define rol(X,n)  (((X)<<(n)) | ((X)>>(32-(n))))
 
-#define P0(x) ((x) ^  ROTATELEFT((x),9)  ^ ROTATELEFT((x),17))
-#define P1(x) ((x) ^  ROTATELEFT((x),15) ^ ROTATELEFT((x),23))
+#define P0(x) ((x) ^  rol((x),9)  ^ rol((x),17))
+#define P1(x) ((x) ^  rol((x),15) ^ rol((x),23))
 
 #define FF0(x,y,z) ( (x) ^ (y) ^ (z))
 #define FF1(x,y,z) (((x) & (y)) | ( (x) & (z)) | ( (y) & (z)))
@@ -56,6 +56,7 @@ void sm3_init_simd(sm3_ctx_simd* ctx) {
 
 void sm3_compress_simd(uint32_t digest[8], const unsigned char block[64])
 {
+
 	int j;
 	uint32_t W[68], W1[64];
 	const uint32_t* pblock = (const uint32_t*)block;
@@ -71,31 +72,38 @@ void sm3_compress_simd(uint32_t digest[8], const unsigned char block[64])
 	uint32_t SS1, SS2, TT1, TT2, T[64];
 
 
-	for (j = 0; j < 2; j++) {
-		W[0 + j * 8] = cpu_to_be32(pblock[0 + j * 8]);
-		W[1 + j * 8] = cpu_to_be32(pblock[1 + j * 8]);
-		W[2 + j * 8] = cpu_to_be32(pblock[2 + j * 8]);
-		W[3 + j * 8] = cpu_to_be32(pblock[3 + j * 8]);
-		W[4 + j * 8] = cpu_to_be32(pblock[4 + j * 8]);
-		W[5 + j * 8] = cpu_to_be32(pblock[5 + j * 8]);
-		W[6 + j * 8] = cpu_to_be32(pblock[6 + j * 8]);
-		W[7 + j * 8] = cpu_to_be32(pblock[7 + j * 8]);
-	}
-	for (j = 0; j < 6; j++) {
-		W[16 + 8 * j] = P1(W[16 + 8 * j - 16] ^ W[16 + 8 * j - 9] ^ ROTATELEFT(W[16 + 8 * j - 3], 15)) ^ ROTATELEFT(W[16 + 8 * j - 13], 7) ^ W[16 + 8 * j - 6];
-		W[17 + 8 * j] = P1(W[17 + 8 * j - 16] ^ W[17 + 8 * j - 9] ^ ROTATELEFT(W[17 + 8 * j - 3], 15)) ^ ROTATELEFT(W[17 + 8 * j - 13], 7) ^ W[17 + 8 * j - 6];
-		W[18 + 8 * j] = P1(W[18 + 8 * j - 16] ^ W[18 + 8 * j - 9] ^ ROTATELEFT(W[18 + 8 * j - 3], 15)) ^ ROTATELEFT(W[18 + 8 * j - 13], 7) ^ W[18 + 8 * j - 6];
-		W[19 + 8 * j] = P1(W[19 + 8 * j - 16] ^ W[19 + 8 * j - 9] ^ ROTATELEFT(W[19 + 8 * j - 3], 15)) ^ ROTATELEFT(W[19 + 8 * j - 13], 7) ^ W[19 + 8 * j - 6];
-		W[20 + 8 * j] = P1(W[20 + 8 * j - 16] ^ W[20 + 8 * j - 9] ^ ROTATELEFT(W[20 + 8 * j - 3], 15)) ^ ROTATELEFT(W[20 + 8 * j - 13], 7) ^ W[20 + 8 * j - 6];
-		W[21 + 8 * j] = P1(W[21 + 8 * j - 16] ^ W[21 + 8 * j - 9] ^ ROTATELEFT(W[21 + 8 * j - 3], 15)) ^ ROTATELEFT(W[21 + 8 * j - 13], 7) ^ W[21 + 8 * j - 6];
-		W[22 + 8 * j] = P1(W[22 + 8 * j - 16] ^ W[22 + 8 * j - 9] ^ ROTATELEFT(W[22 + 8 * j - 3], 15)) ^ ROTATELEFT(W[22 + 8 * j - 13], 7) ^ W[22 + 8 * j - 6];
-		W[23 + 8 * j] = P1(W[23 + 8 * j - 16] ^ W[23 + 8 * j - 9] ^ ROTATELEFT(W[23 + 8 * j - 3], 15)) ^ ROTATELEFT(W[23 + 8 * j - 13], 7) ^ W[23 + 8 * j - 6];
-	}
+	for (j = 0; j < 16; j++) W[j] = _byteswap_ulong(pblock[j]);
 
-	W[64] = P1(W[48] ^ W[55] ^ ROTATELEFT(W[61], 15)) ^ ROTATELEFT(W[51], 7) ^ W[58];
-	W[65] = P1(W[49] ^ W[56] ^ ROTATELEFT(W[62], 15)) ^ ROTATELEFT(W[52], 7) ^ W[59];
-	W[66] = P1(W[50] ^ W[57] ^ ROTATELEFT(W[63], 15)) ^ ROTATELEFT(W[53], 7) ^ W[60];
-	W[67] = P1(W[51] ^ W[58] ^ ROTATELEFT(W[64], 15)) ^ ROTATELEFT(W[54], 7) ^ W[61];
+	/*for (j = 0; j < 6; j++) {
+		W[16 + 8 * j] = P1(W[16 + 8 * j - 16] ^ W[16 + 8 * j - 9] ^ rol(W[16 + 8 * j - 3], 15)) ^ rol(W[16 + 8 * j - 13], 7) ^ W[16 + 8 * j - 6];
+		W[17 + 8 * j] = P1(W[17 + 8 * j - 16] ^ W[17 + 8 * j - 9] ^ rol(W[17 + 8 * j - 3], 15)) ^ rol(W[17 + 8 * j - 13], 7) ^ W[17 + 8 * j - 6];
+		W[18 + 8 * j] = P1(W[18 + 8 * j - 16] ^ W[18 + 8 * j - 9] ^ rol(W[18 + 8 * j - 3], 15)) ^ rol(W[18 + 8 * j - 13], 7) ^ W[18 + 8 * j - 6];
+		W[19 + 8 * j] = P1(W[19 + 8 * j - 16] ^ W[19 + 8 * j - 9] ^ rol(W[19 + 8 * j - 3], 15)) ^ rol(W[19 + 8 * j - 13], 7) ^ W[19 + 8 * j - 6];
+		W[20 + 8 * j] = P1(W[20 + 8 * j - 16] ^ W[20 + 8 * j - 9] ^ rol(W[20 + 8 * j - 3], 15)) ^ rol(W[20 + 8 * j - 13], 7) ^ W[20 + 8 * j - 6];
+		W[21 + 8 * j] = P1(W[21 + 8 * j - 16] ^ W[21 + 8 * j - 9] ^ rol(W[21 + 8 * j - 3], 15)) ^ rol(W[21 + 8 * j - 13], 7) ^ W[21 + 8 * j - 6];
+		W[22 + 8 * j] = P1(W[22 + 8 * j - 16] ^ W[22 + 8 * j - 9] ^ rol(W[22 + 8 * j - 3], 15)) ^ rol(W[22 + 8 * j - 13], 7) ^ W[22 + 8 * j - 6];
+		W[23 + 8 * j] = P1(W[23 + 8 * j - 16] ^ W[23 + 8 * j - 9] ^ rol(W[23 + 8 * j - 3], 15)) ^ rol(W[23 + 8 * j - 13], 7) ^ W[23 + 8 * j - 6];
+	}*/
+	
+#pragma omp parallel for
+	for (j = 0; j < 6; j++) {
+		W[16 + 8 * j] = P1(W[16 + 8 * j - 16] ^ W[16 + 8 * j - 9] ^ rol(W[16 + 8 * j - 3], 15)) ^ rol(W[16 + 8 * j - 13], 7) ^ W[16 + 8 * j - 6];
+		W[17 + 8 * j] = P1(W[17 + 8 * j - 16] ^ W[17 + 8 * j - 9] ^ rol(W[17 + 8 * j - 3], 15)) ^ rol(W[17 + 8 * j - 13], 7) ^ W[17 + 8 * j - 6];
+		W[18 + 8 * j] = P1(W[18 + 8 * j - 16] ^ W[18 + 8 * j - 9] ^ rol(W[18 + 8 * j - 3], 15)) ^ rol(W[18 + 8 * j - 13], 7) ^ W[18 + 8 * j - 6];
+		W[19 + 8 * j] = P1(W[19 + 8 * j - 16] ^ W[19 + 8 * j - 9] ^ rol(W[19 + 8 * j - 3], 15)) ^ rol(W[19 + 8 * j - 13], 7) ^ W[19 + 8 * j - 6];
+		W[20 + 8 * j] = P1(W[20 + 8 * j - 16] ^ W[20 + 8 * j - 9] ^ rol(W[20 + 8 * j - 3], 15)) ^ rol(W[20 + 8 * j - 13], 7) ^ W[20 + 8 * j - 6];
+		W[21 + 8 * j] = P1(W[21 + 8 * j - 16] ^ W[21 + 8 * j - 9] ^ rol(W[21 + 8 * j - 3], 15)) ^ rol(W[21 + 8 * j - 13], 7) ^ W[21 + 8 * j - 6];
+		W[22 + 8 * j] = P1(W[22 + 8 * j - 16] ^ W[22 + 8 * j - 9] ^ rol(W[22 + 8 * j - 3], 15)) ^ rol(W[22 + 8 * j - 13], 7) ^ W[22 + 8 * j - 6];
+		W[23 + 8 * j] = P1(W[23 + 8 * j - 16] ^ W[23 + 8 * j - 9] ^ rol(W[23 + 8 * j - 3], 15)) ^ rol(W[23 + 8 * j - 13], 7) ^ W[23 + 8 * j - 6];
+	}
+#pragma omp parallel for
+	for (j = 64; j < 68; j++) {
+		W[j] = P1(W[j - 16] ^ W[j - 9] ^ rol(W[j - 3], 15)) ^ rol(W[j - 13], 7) ^ W[j - 6];
+	}
+	/*W[64] = P1(W[48] ^ W[55] ^ rol(W[61], 15)) ^ rol(W[51], 7) ^ W[58];
+	W[65] = P1(W[49] ^ W[56] ^ rol(W[62], 15)) ^ rol(W[52], 7) ^ W[59];
+	W[66] = P1(W[50] ^ W[57] ^ rol(W[63], 15)) ^ rol(W[53], 7) ^ W[60];
+	W[67] = P1(W[51] ^ W[58] ^ rol(W[64], 15)) ^ rol(W[54], 7) ^ W[61];*/
 
 	for (j = 0; j < 2; j++) {
 		__m256i a1 = _mm256_loadu_epi32(&W[0 + 32 * j]);
@@ -119,33 +127,32 @@ void sm3_compress_simd(uint32_t digest[8], const unsigned char block[64])
 		_mm256_storeu_epi32(&W1[24 + 32 * j], c4);
 	}
 
-
 	for (j = 0; j < 16; j++) {
-		SS1 = ROTATELEFT((ROTATELEFT(A, 12) + E + ROTATELEFT(0x79CC4519, j)), 7);
-		SS2 = SS1 ^ ROTATELEFT(A, 12);
+		SS1 = rol((rol(A, 12) + E + rol(0x79CC4519, j)), 7);
+		SS2 = SS1 ^ rol(A, 12);
 		TT1 = FF0(A, B, C) + D + SS2 + W1[j];
 		TT2 = GG0(E, F, G) + H + SS1 + W[j];
 		D = C;
-		C = ROTATELEFT(B, 9);
+		C = rol(B, 9);
 		B = A;
 		A = TT1;
 		H = G;
-		G = ROTATELEFT(F, 19);
+		G = rol(F, 19);
 		F = E;
 		E = P0(TT2);
 	}
 
 	for (j = 16; j < 64; j++) {
-		SS1 = ROTATELEFT((ROTATELEFT(A, 12) + E + ROTATELEFT(0x7A879D8A, j)), 7);
-		SS2 = SS1 ^ ROTATELEFT(A, 12);
+		SS1 = rol((rol(A, 12) + E + rol(0x7A879D8A, j)), 7);
+		SS2 = SS1 ^ rol(A, 12);
 		TT1 = FF1(A, B, C) + D + SS2 + W1[j];
 		TT2 = GG1(E, F, G) + H + SS1 + W[j];
 		D = C;
-		C = ROTATELEFT(B, 9);
+		C = rol(B, 9);
 		B = A;
 		A = TT1;
 		H = G;
-		G = ROTATELEFT(F, 19);
+		G = rol(F, 19);
 		F = E;
 		E = P0(TT2);
 	}
