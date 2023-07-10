@@ -1,4 +1,4 @@
-/*#include <iostream>
+#include <iostream>
 #include "openssl/evp.h"
 #include "openssl/rand.h"
 #include <random>
@@ -49,18 +49,18 @@ void rho_method() {
         std::memcpy(&key2, out4, COLLISION_BYTE);
 
         if (key1 == key2) {
-            printf("ÕÒµ½Åö×²£¡£¡£¡\n");
-            printf("µÚÒ»¶ÎÏûÏ¢Îª£º");
+            printf("æ‰¾åˆ°ç¢°æ’ï¼ï¼ï¼\n");
+            printf("ç¬¬ä¸€æ®µæ¶ˆæ¯ä¸ºï¼š");
             printf_hex(out1, 32);
             printf("\n");
-            printf("µÚÒ»¶ÎÏûÏ¢¹şÏ£ÖµÎª£º");
+            printf("ç¬¬ä¸€æ®µæ¶ˆæ¯å“ˆå¸Œå€¼ä¸ºï¼š");
             printf_hex(out3, 32);
             printf("\n");
 
-            printf("µÚ¶ş¶ÎÏûÏ¢Îª£º");
+            printf("ç¬¬äºŒæ®µæ¶ˆæ¯ä¸ºï¼š");
             printf_hex(out2, 32);
             printf("\n");
-            printf("µÚ¶ş¶ÎÏûÏ¢¹şÏ£ÖµÎª£º");
+            printf("ç¬¬äºŒæ®µæ¶ˆæ¯å“ˆå¸Œå€¼ä¸ºï¼š");
             printf_hex(out4, 32);
             printf("\n");
             break;
@@ -75,11 +75,10 @@ void rho_method() {
 
 
 int main() {
-    //printf("rho_method³¤¶ÈÎª£º48\nÆğÊ¼Ëæ»úÊı¾İÎª£º10EE31AE3F97FBFE53F3571377EBC1EE1E62B258DDCA2D8DF022A91CA6B353\n\nÕÒµ½Åö×²£¡£¡£¡\n\nµÚÒ»¶ÎÏûÏ¢Îª£º48D96C6AE24F28F5B796CA44BF79F9A9A5C7783DB8DB6497C953CAC198F1\nµÚÒ»¶ÎÏûÏ¢¹şÏ£ÖµÎª£ºE3EB05F6C3AD27CA0C1A1B89FBD19E591A576388E59C75F699BACC6CD01264\n\nµÚ¶ş¶ÎÏûÏ¢Îª£ºDB4BFE3A1B4936F359C691EB81EF6013DEFD1179A36C241EC7BC932AF3144\nµÚ¶ş¶ÎÏûÏ¢¹şÏ£ÖµÎª£ºE3EB05F6C3ADDAD7F6A69D6DFB1468327DFD98D916C28EA2C6CBA2F791C2B32\n\nCollision time for SM3 = 45.84613 s");
-    std::cout << "rho_method³¤¶ÈÎª£º" << COLLISION_LEN << std::endl;
+    std::cout << "rho_methodé•¿åº¦ä¸ºï¼š" << COLLISION_LEN << std::endl;
 
     RAND_bytes(data, 32);
-    printf("ÆğÊ¼Ëæ»úÊı¾İÎª£º");
+    printf("èµ·å§‹éšæœºæ•°æ®ä¸ºï¼š");
     printf_hex(data, 32);
 
     auto start_time = std::chrono::steady_clock::now();
@@ -90,4 +89,4 @@ int main() {
 
     std::cout << "Collision time for SM3 = " << (std::chrono::duration <double, std::milli>(running_time).count())/1000 << " s" << std::endl;
     return 0;
-}*/
+}
