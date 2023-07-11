@@ -2,36 +2,35 @@
 
 ## ECDSA
 
-### $Precompute$:
-- compute $Z_A=H_{256}\left(E N T L_A\left\|I D_A\right\| a\|b\| x_G\left\|y_G\right\| x_A \| y_A\right)$
-- identifier $I D_A$ length is entlen $A_A$
-- $E N T L_A$ is encoded from entlen ${ }_A$ and takes two bytes
-- $\mathrm{H}_{256}$ : hash function SM3
 ### $KeyGen$:
-- $P_A=d_A \cdot G=\left(x_A, y_A\right)$
+- $P=d G, n$ is order
+
 ### $Sign(\mathrm{M})$ :
-- $\{Sign}_{d_A}\left(M, Z_A\right) \rightarrow(r, s)$
-- $\{Set} \pi=Z_A|| M$
-- Compute $e=H_v(\bar{M})$, where the output of $H_v$ is $v$
-- Generate random number $k \in[1, n-1]$
-- Compute $k G=\left(x_1, y_1\right)$
-- Compute $r=\left(e+x_1\right) \bmod n$,
-- if $r=0$ or $r+k=n$, generate random number $k$ again
-- Compute $s=\left(\left(1+d_A\right)^{-1} \cdot\left(k-r \cdot d_A\right)\right) \bmod n$
-- if $s=0$, generate random number $k$ again
+- ${Sign}(m)$
+- $k \leftarrow Z_n^*, R=k G$
+- $r=R_x \bmod n, r \neq 0$
+- $e={hash}(m)$
+- $s=k^{-1}(e+d r) \bmod n$
+
+### $Verify(\mathrm{r,s})$ of m with P :
+- $e={hash}(m)$
+- $w=s^{-1} \bmod n$
+- $\left(r^{\prime}, s^{\prime}\right)=e \cdot w G+r \cdot w P$
+- Check if $r^{\prime}==r$
+- Holds for correct sig since
+- $e s^{-1} G+r s^{-1} P=s^{-1}(e G+r P)=$
+- $k(e+d r)^{-1}(e+d r) G=k G=R$
+
 
 ## Public Key Recovery
 
-- $s=\left(\left(1+d_A\right)^{-1} \cdot\left(k-r \cdot d_A\right)\right) \bmod n$
-- $s \cdot\left(1+d_A\right)=\left(k-r \cdot d_A\right) \bmod n$
-- $(s+r) d_A=(k-s) \bmod n$
-- $(s+r) d_A G=(k-s) G \bmod n$
-- $d_A \cdot G=P_A=(s+r)^{-1}(k G-s G)$
+- $e s^{-1} G+r s^{-1} P=s^{-1}(e G+r P)$
+- $P=dG=(R-e s^{-1})s r^{-1}$
   
-How to compute $k G$
+How to compute $P$
 
-- $(k G)_x=x_1=(r-e) \bmod n$, then compute $y_1$
-- $e={Hash}\left(Z_A \| M\right)$ where $Z_A$ is not related public key
+- $e={hash}(m)$
+- $s=k^{-1}(e+d r) \bmod n$
 
 在使用Ethereum的过程中，每次需要使用ECDSA进行签名时，发送方可以不必向验证方发送自己的公钥，而是由验证方根据消息等已知信息自行求出发送方的公钥
 
