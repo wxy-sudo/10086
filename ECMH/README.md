@@ -17,7 +17,12 @@ def ech(u):
 
 - ``echs``函数则对一个集合中的消息m进行哈希后，将他们以椭圆曲线加法加在一起
 ```
-
+def echs(s):
+    for x in s:
+        point = ech(x)
+        if point is not None:
+            result[0],result[1] = add(result[0],result[1],point[0],point[1])
+    return result
 ```
 
 ## 实现结果
