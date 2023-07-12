@@ -7,4 +7,4 @@
 
 ## 实现结果
 
-![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/Project8/AES-ARM.png)
+由于电脑并非arm架构，因而并没有得到该代码的运行结果，这里仅给出实现的代码。
