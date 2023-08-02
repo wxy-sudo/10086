@@ -19,6 +19,7 @@
 | 9   | AES、SM4 implementation   | [AES、SM4 implementation](https://github.com/wxy-sudo/wxy-s/tree/main/AES%E3%80%81SM4%20implementation) |
 | 10   | report on the application of this deduce technique in Ethereum with ECDSA   | [deduce technique in Ethereum with ECDSA](https://github.com/wxy-sudo/wxy-s/blob/main/deduce%20technique%20in%20Ethereum%20with%20ECDSA/README.md) |
 | 11   | impl sm2 with RFC6979   | [impl sm2 with RFC6979](https://github.com/wxy-sudo/wxy-s/tree/main/impl%20sm2%20with%20RFC6979) |
+| 12   | verify the above pitfalls with proof-of-concept code   | [pitfalls](https://github.com/wxy-sudo/wxy-s/tree/main/pitfalls) |
 | 13   | Implement the above ECMH scheme   | [ECMH](https://github.com/wxy-sudo/wxy-s/tree/main/ECMH) |
 | 14   | Implement a PGP scheme with SM2   | [SM2_PGP](https://github.com/wxy-sudo/wxy-s/tree/main/SM2_PGP) |
 | 19   | forge a signature to pretend that you are Satoshi   | [forge_Satoshi](https://github.com/wxy-sudo/wxy-s/tree/main/forge%20Satoshi) |
