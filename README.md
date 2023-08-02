@@ -22,6 +22,7 @@
 | 12   | verify the above pitfalls with proof-of-concept code   | [pitfalls](https://github.com/wxy-sudo/wxy-s/tree/main/pitfalls) |
 | 13   | Implement the above ECMH scheme   | [ECMH](https://github.com/wxy-sudo/wxy-s/tree/main/ECMH) |
 | 14   | Implement a PGP scheme with SM2   | [SM2_PGP](https://github.com/wxy-sudo/wxy-s/tree/main/SM2_PGP) |
+| 17   | 比较Firefox和谷歌的记住密码插件的实现区别   | 见汇总报告 |
 | 19   | forge a signature to pretend that you are Satoshi   | [forge_Satoshi](https://github.com/wxy-sudo/wxy-s/tree/main/forge%20Satoshi) |
 | 22   | research report on MPT   | [MPT report](https://github.com/wxy-sudo/wxy-s/blob/main/MPT%20report/README.md) |
 | 额外   | 信安赛项目(基于格的多关键字模糊可搜索加密)   | [信安赛项目](https://github.com/wxy-sudo/wxy-s/tree/main/%E4%BF%A1%E5%AE%89%E8%B5%9B%E9%A1%B9%E7%9B%AE)|
@@ -710,6 +711,23 @@ def echs(s):
 ```
 
 进行加密
+
+## Project22: research report on MPT
+
+### 实现结果
+
+Firefox和Chrome都提供了记住密码的功能，但它们的实现方式略有不同，具体如下：
+
+### Firefox
+
+在Firefox中，记住密码的功能是通过Firefox自带的密码管理器实现的。该密码管理器使用主机操作系统提供的加密技术来保护密码数据，同时提供了主密码功能来保护所有保存在密码管理器中的密码。当用户在一个网站上输入用户名和密码时，Firefox会弹出一个对话框询问是否记住密码。如果用户选择记住密码，则Firefox会将密码保存到密码管理器中，并在用户下次访问该网站时自动填充登录信息。Firefox的密码管理器是一个独立于浏览器的密码管理工具，可以被其他应用程序所使用。
+
+### Chrome
+
+在Chrome中，记住密码的功能是通过自动填充功能实现的。当用户在一个网站上输入用户名和密码时，Chrome会自动提示是否保存密码。如果用户选择保存密码，则Chrome会将密码保存到用户的Google账户中，并在用户下次访问该网站时自动填充登录信息。Chrome的自动填充功能需要用户登录Google账户才能保存和同步密码。该功能使用Google的加密和安全技术保护用户的密码数据，并且可以在多个设备上同步和使用。不同于Firefox的主密码功能，Chrome没有提供类似的密钥保护功能。
+
+总的来说，Firefox和Chrome的记住密码功能都提供了便利的自动填充功能来记住密码，但它们的实现方式略有不同。Firefox使用独立的密码管理器来保存和管理密码数据，并提供了主密码功能来保护所有密码。而Chrome使用Google账户来同步和保存密码数据，不提供直接的密钥保护功能，但可以在多个设备上同步使用。
+
 
 ## Project19: forge a signature to pretend that you are Satoshi
 
