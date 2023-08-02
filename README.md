@@ -605,6 +605,32 @@ def decrypt(c1, c2, c3):
 
 ![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/Project11/sm2_enc.png)
 
+## Project12: verify the above pitfalls with proof-of-concept code
+
+### k泄露
+
+![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/Project12/k%E6%B3%84%E9%9C%B2.png)
+
+在签名过程中，倘若采用的随机数k被泄露，则攻击者根据一组签名对（r，s）可轻易的求出签名的私钥，进而利用该私钥达到伪造签名的目的。会带来极大的危害。
+
+### k重用
+
+![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/Project12/k%E9%87%8D%E7%94%A8.png)
+
+重用k与k泄露相似，同样是攻击者经过简单的推导，即可求得签名的私钥，进而造成一系列的威胁。
+
+### 相同的k
+
+![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/Project12/%E7%9B%B8%E5%90%8C%E7%9A%84k.png)
+
+给定两个不同的消息m1和m2，分别由两个不同的用户使用SM2签名算法对其进行签名，计算得到签名结果(r1, s1)和(r2, s2)。 然后通过逆运算，根据上图中公式可分别推导出用户1和用户2的私钥d_A和d_B。
+
+如果在不同的用户之间重用相同的随机数k进行签名，那么通过一些简单的计算，每个用户都能推导出相应的私钥。这种方式同样是不安全的，因为私钥的重用会导致签名无效，并且攻击者可以通过观察不同用户的签名结果来进一步推导出私钥。
+
+### 实现结果
+
+![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/Project12/pitfalls.png)
+
 ## Project13: Implement the above ECMH scheme
 
 ### 实现思路
