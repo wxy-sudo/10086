@@ -759,6 +759,18 @@ Firefox和Chrome都提供了记住密码的功能，但它们的实现方式略�
 最后在本文中, 我们对该模糊搜索方案进行了安全性分析, 证明该方案不仅能够实现面向多关键字的密文模糊搜索, 而且保证了方案的机密性、隐私性和完整性。
 在生成安全索引后, 我们将上述生成安全索引方案与基于格的 PEKS 方案相关联, 提出基于格的面向多关键字的模糊密文搜索方案。将安全索引作为 “邮递员”, 经过哈希变换后压缩为基于格的 PEKS 方案中的输人 id 。由于上述方案全部在文件搜索前便可完成, 即在发送时便进行上述操作。而搜索过程在接收方空闲时选择接收时才会按照用户需求 进行, 保证了各过程的独立性。最终我们将我们的方案与现有的 PEKS 方案进行了效率对 比。结果显示, 我们的实现具有很好的效率。并且, 当安全参数提高时, 整体运行的时间 几乎只是成比例地增长, 而不会带来额外的性能浪费, 具有较高的扩展性。
 
+### 算法描述
+
+![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/%E4%BF%A1%E5%AE%89%E8%B5%9B/10086.png)
+![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/%E4%BF%A1%E5%AE%89%E8%B5%9B/10087.png)
+![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/%E4%BF%A1%E5%AE%89%E8%B5%9B/10088.png)
+![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/%E4%BF%A1%E5%AE%89%E8%B5%9B/10089.png)
+![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/%E4%BF%A1%E5%AE%89%E8%B5%9B/10090.png)
+![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/%E4%BF%A1%E5%AE%89%E8%B5%9B/10091.png)
+![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/%E4%BF%A1%E5%AE%89%E8%B5%9B/10092.png)
+![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/%E4%BF%A1%E5%AE%89%E8%B5%9B/10093.png)
+![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/%E4%BF%A1%E5%AE%89%E8%B5%9B/10094.png)
+
 ### 空间效率对比分析
 
 为了做进一步评估，我们将本文中的实现与一些其它的PEKS方案进行了效率对比。我们分别对于四种不同的方案在同一环境下进行了测试，分别为：
