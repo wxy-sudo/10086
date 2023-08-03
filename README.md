@@ -22,6 +22,8 @@
 | 12   | verify the above pitfalls with proof-of-concept code   | [pitfalls](https://github.com/wxy-sudo/wxy-s/tree/main/pitfalls) |
 | 13   | Implement the above ECMH scheme   | [ECMH](https://github.com/wxy-sudo/wxy-s/tree/main/ECMH) |
 | 14   | Implement a PGP scheme with SM2   | [SM2_PGP](https://github.com/wxy-sudo/wxy-s/tree/main/SM2_PGP) |
+| 15   | implement sm2 2P sign with real network communication   | [SM2_PGP](https://github.com/wxy-sudo/wxy-s/tree/main/SM2_PGP) |
+| 16   | implement sm2 2P decrypt with real network communication   | [SM2_PGP](https://github.com/wxy-sudo/wxy-s/tree/main/SM2_PGP) |
 | 17   | 比较Firefox和谷歌的记住密码插件的实现区别   | 见汇总报告 |
 | 19   | forge a signature to pretend that you are Satoshi   | [forge_Satoshi](https://github.com/wxy-sudo/wxy-s/tree/main/forge%20Satoshi) |
 | 22   | research report on MPT   | [MPT report](https://github.com/wxy-sudo/wxy-s/blob/main/MPT%20report/README.md) |
