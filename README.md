@@ -714,6 +714,31 @@ def echs(s):
 
 进行加密
 
+## Project15: implement sm2 2P sign with real network communication
+
+### 实现思路
+
+![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/15.png)
+
+#### 生成密钥(A)
+
+首先，A生成一个临时私钥d_1，并用其逆元生成一个临时公钥P_1，然后将P_1的横纵坐标发送给B。
+
+#### 签名
+
+A发送待签名消息的hash值e，以及自己生成的临时公钥Q_1给B。B生成一个随机数k_1，然后用基点G进行点乘运算得到临时公钥Q_2，将Q_2的横纵坐标发送给A。然后，B通过私钥计算出签名的两个部分r和s_2，分别发送给A。
+
+
+## Project16: implement sm2 2P decrypt with real network communication
+
+### 实现思路
+
+![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/16.png)
+
+#### 解密与验证
+
+A在解密过程中，接收到B发送的密文C，首先根据C1的横纵坐标长度截取出C1的横纵坐标，然后进行ECC点运算验证C1是否合法。接下来，A使用自己的私钥d_1对C1进行点乘得到x2和y2，并根据x2和y2计算KDF生成的密钥t。 通过对C2和t进行异或运算，A得到解密后的明文M__，然后使用x2、M__和y2计算C3并与接收到的C3进行比较，从而验证消息的完整性。
+
 ## Project17: 比较Firefox和谷歌的记住密码插件的实现区别
 
 ### 实现结果
