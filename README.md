@@ -15,6 +15,8 @@
 | 3   | implement length extension attack for SM3, SHA256, etc.   | [sm3_lengthExtensionAttack](https://github.com/wxy-sudo/wxy-s/tree/main/sm3_lengthExtensionAttack) |
 | 4   | do your best to optimize SM3 implementation (software)   | [optimize SM3](https://github.com/wxy-sudo/wxy-s/tree/main/optimize%20SM3) |
 | 5   | Merkle Tree   | [Merkle Tree](https://github.com/wxy-sudo/wxy-s/tree/main/Merkle%20Tree) |
+| 6   | impl this protocol with actual network communication   | [protocal](https://github.com/wxy-sudo/wxy-s/blob/main/README.md) |
+| 7   | Try to Implement this scheme   | [scheme](https://github.com/wxy-sudo/wxy-s/blob/main/README.md) |
 | 8   | AES impl with ARM instruction   | [AES-ARM](https://github.com/wxy-sudo/wxy-s/tree/main/AES-ARM) |
 | 9   | AES、SM4 implementation   | [AES、SM4 implementation](https://github.com/wxy-sudo/wxy-s/tree/main/AES%E3%80%81SM4%20implementation) |
 | 10   | report on the application of this deduce technique in Ethereum with ECDSA   | [deduce technique in Ethereum with ECDSA](https://github.com/wxy-sudo/wxy-s/blob/main/deduce%20technique%20in%20Ethereum%20with%20ECDSA/README.md) |
@@ -25,7 +27,10 @@
 | 15   | implement sm2 2P sign with real network communication   | [sign](https://github.com/wxy-sudo/wxy-s/tree/main/sign) |
 | 16   | implement sm2 2P decrypt with real network communication   | [decrypt](https://github.com/wxy-sudo/wxy-s/tree/main/decrypt) |
 | 17   | 比较Firefox和谷歌的记住密码插件的实现区别   | [汇总报告](https://github.com/wxy-sudo/wxy-s/blob/main/README.md) |
+| 18   | send a tx on Bitcoin testnet   | [Bitcoin](https://github.com/wxy-sudo/wxy-s/blob/main/README.md) |
 | 19   | forge a signature to pretend that you are Satoshi   | [forge_Satoshi](https://github.com/wxy-sudo/wxy-s/tree/main/forge%20Satoshi) |
+| 20   | ECMH PoC   | 删去 |
+| 21   | Schnorr Bacth   | [Schnorr Bacth](https://github.com/wxy-sudo/wxy-s/blob/main/README.md) |
 | 22   | research report on MPT   | [MPT report](https://github.com/wxy-sudo/wxy-s/blob/main/MPT%20report/README.md) |
 | 额外   | 信安赛项目(基于格的多关键字模糊可搜索加密)   | [信安赛项目](https://github.com/wxy-sudo/wxy-s/tree/main/%E4%BF%A1%E5%AE%89%E8%B5%9B%E9%A1%B9%E7%9B%AE)|
 
@@ -336,6 +341,14 @@ void sm3_compress_simd(uint32_t digest[8], const unsigned char block[64])
 ### 实现结果
 
 ![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/Project5/Merkle%20Tree.png)
+
+## Project6: impl this protocol with actual network communication
+
+### 待完成
+
+## Project7: Try to Implement this scheme
+
+### 待完成
 
 ## Project8: AES impl with ARM instruction
 
@@ -747,13 +760,42 @@ Firefox和Chrome都提供了记住密码的功能，但它们的实现方式略�
 
 ### Firefox
 
+Firefox浏览器中记住密码插件是通过在浏览器中保存密码和用户名的实现。具体来说，当用户在一个网站上输入用户名和密码时，Firefox会询问是否要保存这些信息。如果用户选择了保存，插件会将该信息保存在Firefox的密码管理器中
+当用户下一次访问该网站时，Firefox会自动填写保存的用户名和密码，以方便用户登录。如果用户不想自动填写该信息，插件也允许用户手动输入密码
+插件还可以允许用户设置一个主密码，以保护所有保存在密码管理器中的密码。这些密码被加密并保存在计算机上，只有用户输入正确的主密码才能访问它们
+
 在Firefox中，记住密码的功能是通过Firefox自带的密码管理器实现的。该密码管理器使用主机操作系统提供的加密技术来保护密码数据，同时提供了主密码功能来保护所有保存在密码管理器中的密码。当用户在一个网站上输入用户名和密码时，Firefox会弹出一个对话框询问是否记住密码。如果用户选择记住密码，则Firefox会将密码保存到密码管理器中，并在用户下次访问该网站时自动填充登录信息。Firefox的密码管理器是一个独立于浏览器的密码管理工具，可以被其他应用程序所使用。
+
+#### 实现
+1.用户在浏览器中输入用户名和密码。当用户单击"登录"按钮时，插件会捕获表单提交事件并获取所需的信息
+2.插件会检查是否启用了"记住密码"选项，如果已启用，则在浏览器中保存该信息
+3.当用户重新访问该网站时，插件会检查该站点是否在密码管理器中，如果是，则会自动填写保存的用户名和密码并自动提交表单
+4.如果用户尚未在密码管理器中保存该网站的用户名和密码，则插件会提示用户保存该信息。如果用户同意，则可以将信息存储在密码管理器中，以便下次访问时自动填写
+5.插件还可以允许用户设置一个主密码来保护所有保存在密码管理器中的密码。每次用户重新启动浏览器或计算机时，插件会要求用户输入该主密码。只有当用户输入正确的主密码时，才会解密并访问保存在密码管理器中的密码
+总的来说，Firefox浏览器中的记住密码插件提供了一种方便、快捷、安全的密码管理方式，可以减少用户重复输入用户名和密码的次数，同时保护用户的个人信息不被盗取
 
 ### Chrome
 
+
 在Chrome中，记住密码的功能是通过自动填充功能实现的。当用户在一个网站上输入用户名和密码时，Chrome会自动提示是否保存密码。如果用户选择保存密码，则Chrome会将密码保存到用户的Google账户中，并在用户下次访问该网站时自动填充登录信息。Chrome的自动填充功能需要用户登录Google账户才能保存和同步密码。该功能使用Google的加密和安全技术保护用户的密码数据，并且可以在多个设备上同步和使用。不同于Firefox的主密码功能，Chrome没有提供类似的密钥保护功能。
 
+#### 实现
+
+1.在插件中添加一个登录表单，并在表单中添加用于输入用户名和密码的输入框
+创建一个新的Chrome扩展程序并定义权限 首先需要创建一个Chrome扩展程序，可以使用任何文本编辑器创建一个manifest.json（清单文件），并必须指定扩展程序必需的权限。具体的权限可以参考Chrome API的文档。在这里我们需要使用的权限包括"cookies", "storage", "tabs"和"webNavigation"。这些权限将允许扩展程序访问浏览器cookie、存储API、标签页和Web导航API
+2.在插件中保存用户的用户名和密码
+通过chrome.cookies API和chrome.storage API获取和存储密码 当用户提交登录表单时，扩展程序会使用chrome.cookies API获取表单数据和cookie，然后将其存储在chrome.storage中。如果用户选择了"记住密码"选项，则插件会在chrome.storage中保留该信息以备将来使用
+3.在插件中添加一个绑定到登录表单的onsubmit事件的监听器，当用户提交表单时，从插件中获取保存的用户名和密码，并自动填充到相应的输入框中
+在此过程中，扩展程序可以使用chrome.webNavigation API来检测用户是否已经登录网站，并使用chrome.tabs API打开登录表单的标签页。一旦登录成功，扩展程序将使用chrome.cookies API获取表单数据和cookie，并将其存储在chrome.storage中，以供将来使用
+当用户重新访问该网站时，插件会检查chrome.storage中是否仍存在保存的用户名和密码 扩展程序可以使用chrome.webNavigation API和chrome.tabs API监视用户的浏览行为，并在用户重新访问网站时检查chrome.storage是否已保存该网站的用户名和密码。如果存在，则扩展程序可以从chrome.storage中获得用户的用户名和密码，并自动填充登录表单
+4.为了避免用户的密码泄露，可以在插件中添加一些密码保护措施，如对用户密码进行加密存储等
+最后，在插件选项中，扩展程序可以提供用户评价保存的用户名和密码的安全性的工具，并可以通过文件和文件夹等方式呈现详细的密码信息。 为了帮助用户了解其密码的安全情况，扩展程序可以提供一个评估工具，比如说强度分析器。通过对密码的长度、复杂性等进行分析，扩展程序可以估算密码的强度。扩展程序还可以向用户提供详细信息，包括密码和用户名，以及它们是何时被保存的，以便用户更好地理解其数字身份
+
 总的来说，Firefox和Chrome的记住密码功能都提供了便利的自动填充功能来记住密码，但它们的实现方式略有不同。Firefox使用独立的密码管理器来保存和管理密码数据，并提供了主密码功能来保护所有密码。而Chrome使用Google账户来同步和保存密码数据，不提供直接的密钥保护功能，但可以在多个设备上同步使用。
+
+## Project18: send a tx on Bitcoin testnet, and parse the tx data down to every bit, better write script yourself
+
+### 待完成
 
 
 ## Project19: forge a signature to pretend that you are Satoshi
@@ -765,6 +807,14 @@ Firefox和Chrome都提供了记住密码的功能，但它们的实现方式略�
 ### 实现结果
 
 ![Image text](https://github.com/wxy-sudo/wxy-s/blob/main/%E5%88%9B%E6%96%B0%E5%88%9B%E4%B8%9A%E5%9B%BE%E7%89%87/Project19/forge%20Satoshi.png)
+
+## Project20: ECMH PoC
+
+### 同Project13
+
+## Project21: Schnorr Bacth
+
+### 待完成
 
 ## Project22: research report on MPT
 
